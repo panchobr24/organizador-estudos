@@ -1,0 +1,601 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+nav {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, #333 0%, #444 100%);
+    padding: 1.2rem 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links li {
+    margin-left: 2rem;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.section {
+    padding: 2rem;
+    margin: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.95);
+    margin: 2rem auto;
+    max-width: 1400px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Estilos do Cronograma */
+.cronograma-grid {
+    display: flex;
+    margin-top: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+}
+
+.hora-col {
+    min-width: 150px;
+}
+
+.dia-col {
+    min-width: 150px;
+}
+
+.hora-header, .dia-header {
+    background-color: #f0f0f0;
+    padding: 0.5rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.hora {
+    padding: 0.5rem;
+    border-bottom: 1px solid #ddd;
+    min-height: 60px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.aula {
+    padding: 0.5rem;
+    border-bottom: 1px solid #ddd;
+    min-height: 60px;
+}
+
+.aula:hover {
+    background-color: #f0f0f0;
+    cursor: text;
+}
+
+/* Estilo para o intervalo */
+.hora:nth-child(5) {
+    background-color: #e6ffe6;
+    font-weight: bold;
+}
+
+/* Estilos das Anotações */
+.anotacoes-header {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+input[type="date"] {
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    flex: 1;
+    max-width: 200px;
+}
+
+input[type="date"]:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.anotacoes-header button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.anotacoes-header button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.materias-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem;
+}
+
+.materia {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.materia:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.materia h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+    font-size: 1.2rem;
+}
+
+.materia textarea {
+    width: 100%;
+    height: 200px;
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    line-height: 1.6;
+    transition: all 0.3s;
+    resize: vertical;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.materia textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    background-color: white;
+}
+
+/* Indicador de data salva com animação */
+.data-salva {
+    color: #155724;
+    font-size: 0.9rem;
+    background-color: #d4edda;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    margin-left: auto;
+    animation: slideIn 0.3s ease-out;
+    border: 1px solid #c3e6cb;
+}
+
+/* Adicionar ícones para cada matéria */
+.materia::before {
+    content: '📝';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    opacity: 0.2;
+    transition: all 0.3s;
+}
+
+.materia:hover::before {
+    opacity: 0.5;
+    transform: scale(1.2);
+}
+
+/* Ícones específicos para cada matéria */
+.materia[data-materia="matematica"]::before { content: '📐'; }
+.materia[data-materia="portugues"]::before { content: '📚'; }
+.materia[data-materia="historia"]::before { content: '🏛️'; }
+.materia[data-materia="geografia"]::before { content: '🌍'; }
+.materia[data-materia="fisica"]::before { content: '⚡'; }
+.materia[data-materia="quimica"]::before { content: '🧪'; }
+.materia[data-materia="biologia"]::before { content: '🧬'; }
+.materia[data-materia="literatura"]::before { content: '📖'; }
+.materia[data-materia="redacao"]::before { content: '✍️'; }
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Adicionar cores sutis para cada matéria */
+.materia {
+    border-left: 4px solid transparent;
+}
+
+.materia[data-materia="matematica"] { border-left-color: #4CAF50; }
+.materia[data-materia="portugues"] { border-left-color: #2196F3; }
+.materia[data-materia="historia"] { border-left-color: #9C27B0; }
+.materia[data-materia="geografia"] { border-left-color: #FF9800; }
+.materia[data-materia="fisica"] { border-left-color: #F44336; }
+.materia[data-materia="quimica"] { border-left-color: #009688; }
+.materia[data-materia="biologia"] { border-left-color: #8BC34A; }
+.materia[data-materia="literatura"] { border-left-color: #3F51B5; }
+.materia[data-materia="redacao"] { border-left-color: #795548; }
+
+/* Estilos do Banco de Questões */
+.filtros {
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#materia-filtro {
+    flex: 1;
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+#materia-filtro:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+.filtros button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filtros button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.questoes-container {
+    display: grid;
+    gap: 1rem;
+}
+
+.questao {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.questao:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.questao h4 {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.resposta-input {
+    width: 100%;
+    padding: 1rem;
+    margin: 1rem 0;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.resposta-input:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.questao button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.questao button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s;
+}
+
+.feedback.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.feedback.correto {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 4px solid #155724;
+}
+
+.feedback.incorreto {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #721c24;
+}
+
+.questoes-navegacao {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 3rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.questoes-navegacao button {
+    background-color: #6c757d;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.questoes-navegacao button:hover:not(:disabled) {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+.questoes-navegacao button:disabled {
+    background-color: #dee2e6;
+    cursor: not-allowed;
+}
+
+#questao-contador {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    padding: 0.5rem 1rem;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.resposta-correta {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+    font-weight: 500;
+    display: none;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilos para os botões de autenticação */
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-left: 2rem;
+}
+
+.btn-login, .btn-cadastro {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-login {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-login:hover {
+    background-color: white;
+    color: #333;
+}
+
+.btn-cadastro {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-cadastro:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+/* Estilos para o modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    margin: 15% auto;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s;
+}
+
+.close {
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.close:hover {
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Melhorar o visual geral do site */
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+} 

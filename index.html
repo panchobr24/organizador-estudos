@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Estudos</title>
+    
+    <!-- Meta tags para SEO e compartilhamento -->
+    <meta name="description" content="Organize seus estudos com cronograma, anotações e banco de questões">
+    <meta name="keywords" content="estudos, organização, cronograma, anotações, questões">
+    
+    <!-- Meta tags para redes sociais -->
+    <meta property="og:title" content="Organizador de Estudos">
+    <meta property="og:description" content="Organize seus estudos com cronograma, anotações e banco de questões">
+    <meta property="og:image" content="/images/preview.jpg">
+    <meta property="og:url" content="https://estudoorganizado.com.br">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">Organizador de Estudos</div>
+        <ul class="nav-links">
+            <li><a href="#cronograma">Cronograma</a></li>
+            <li><a href="#anotacoes">Anotações</a></li>
+            <li><a href="#banco-questoes">Banco de Questões</a></li>
+            <li class="auth-buttons">
+                <button onclick="mostrarLogin()" class="btn-login">Entrar</button>
+                <button onclick="mostrarCadastro()" class="btn-cadastro">Cadastrar</button>
+            </li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="cronograma" class="section">
+            <h2>Cronograma Semanal</h2>
+            <div class="cronograma-grid">
+                <div class="hora-col">
+                    <div class="hora-header">Horário</div>
+                    <div class="hora">07:15 - 08:05</div>
+                    <div class="hora">08:05 - 09:00</div>
+                    <div class="hora">09:00 - 09:50</div>
+                    <div class="hora">09:50 - 10:05</div>
+                    <div class="hora">10:05 - 11:00</div>
+                    <div class="hora">11:00 - 11:50</div>
+                    <div class="hora">11:50 - 12:15</div>
+                </div>
+                <div class="dia-col">
+                    <div class="dia-header">Segunda</div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                </div>
+                <div class="dia-col">
+                    <div class="dia-header">Terça</div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                </div>
+                <div class="dia-col">
+                    <div class="dia-header">Quarta</div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                </div>
+                <div class="dia-col">
+                    <div class="dia-header">Quinta</div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                </div>
+                <div class="dia-col">
+                    <div class="dia-header">Sexta</div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                    <div class="aula" contenteditable="true"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="anotacoes" class="section">
+            <h2>Anotações por Matéria</h2>
+            <div class="anotacoes-header">
+                <input type="date" id="data-anotacao" onchange="carregarAnotacoesPorData(this.value)">
+                <button onclick="salvarAnotacoes()">Salvar Anotações</button>
+            </div>
+            <div class="materias-container">
+                <div class="materia" data-materia="matematica">
+                    <h3>Matemática</h3>
+                    <textarea placeholder="Digite suas anotações aqui..." data-materia="matematica"></textarea>
+                </div>
+                <div class="materia" data-materia="portugues">
+                    <h3>Português</h3>
+                    <textarea placeholder="Digite suas anotações aqui..." data-materia="portugues"></textarea>
+                </div>
+                <div class="materia" data-materia="historia">
+                    <h3>História</h3>
+                    <textarea placeholder="Digite suas anotações aqui..." data-materia="historia"></textarea>
+                </div>
+                <div class="materia" data-materia="geografia">
+                    <h3>Geografia</h3>
+                    <textarea placeholder="Digite suas anotações aqui..." data-materia="geografia"></textarea>
+                </div>
+                <div class="materia" data-materia="fisica">
+                    <h3>Física</h3>
+                    <textarea placeholder="Digite suas anotações aqui..." data-materia="fisica"></textarea>
+                </div>
+                <div class="materia" data-materia="quimica">
+                    <h3>Química</h3>
+                    <textarea placeholder="Digite suas anotações aqui..." data-materia="quimica"></textarea>
+                </div>
+                <div class="materia" data-materia="biologia">
+                    <h3>Biologia</h3>
+                    <textarea placeholder="Digite suas anotações aqui..." data-materia="biologia"></textarea>
+                </div>
+                <div class="materia" data-materia="literatura">
+                    <h3>Literatura</h3>
+                    <textarea placeholder="Digite suas anotações aqui..." data-materia="literatura"></textarea>
+                </div>
+                <div class="materia" data-materia="redacao">
+                    <h3>Redação</h3>
+                    <textarea placeholder="Digite suas anotações aqui..." data-materia="redacao"></textarea>
+                </div>
+            </div>
+        </section>
+
+        <section id="banco-questoes" class="section">
+            <h2>Banco de Questões</h2>
+            <div class="filtros">
+                <select id="materia-filtro">
+                    <option value="">Selecione a matéria</option>
+                </select>
+                <button onclick="filtrarQuestoes()">Iniciar</button>
+            </div>
+            <div class="questoes-container">
+                <!-- As questões serão carregadas dinamicamente -->
+            </div>
+            <div class="questoes-navegacao">
+                <button onclick="questaoAnterior()" id="btn-anterior">Anterior</button>
+                <span id="questao-contador">0/0</span>
+                <button onclick="proximaQuestao()" id="btn-proxima">Próxima</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Adicionar modal de login -->
+    <div id="modal-login" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal('modal-login')">&times;</span>
+            <h2>Login</h2>
+            <form onsubmit="fazerLogin(event)">
+                <div class="form-group">
+                    <label for="email-login">Email:</label>
+                    <input type="email" id="email-login" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha-login">Senha:</label>
+                    <input type="password" id="senha-login" required>
+                </div>
+                <button type="submit" class="btn-submit">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Adicionar modal de cadastro -->
+    <div id="modal-cadastro" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal('modal-cadastro')">&times;</span>
+            <h2>Cadastro</h2>
+            <form onsubmit="fazerCadastro(event)">
+                <div class="form-group">
+                    <label for="nome-cadastro">Nome:</label>
+                    <input type="text" id="nome-cadastro" required>
+                </div>
+                <div class="form-group">
+                    <label for="email-cadastro">Email:</label>
+                    <input type="email" id="email-cadastro" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha-cadastro">Senha:</label>
+                    <input type="password" id="senha-cadastro" required>
+                </div>
+                <button type="submit" class="btn-submit">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
