@@ -28,6 +28,7 @@
             <li><a href="#cronograma">Cronograma</a></li>
             <li><a href="#anotacoes">Anotações</a></li>
             <li><a href="#banco-questoes">Banco de Questões</a></li>
+            <li><a href="#calendario">Calendário</a></li>
             <li class="auth-buttons">
                 <button onclick="mostrarLogin()" class="btn-login">Entrar</button>
                 <button onclick="mostrarCadastro()" class="btn-cadastro">Cadastrar</button>
@@ -164,6 +165,13 @@
                 <span id="questao-contador">0/0</span>
                 <button onclick="proximaQuestao()" id="btn-proxima">Próxima</button>
             </div>
+        </section>
+
+        <!-- Nova seção de Calendário -->
+        <section id="calendario" class="section">
+            <h2>Calendário de Eventos</h2>
+            <div id="calendar"></div>
+            <button onclick="adicionarEvento()">Adicionar Evento</button>
         </section>
     </main>
 
