@@ -704,53 +704,96 @@ function atualizarInterface() {
 // Chamar atualizarInterface quando a página carregar
 document.addEventListener('DOMContentLoaded', atualizarInterface);
 
-// Função para inicializar o calendário
+// Função para inicializar o calendário com seleção de mês e ano
 function inicializarCalendario() {
     const calendar = document.getElementById('calendar');
     const dataAtual = new Date();
-    const mesAtual = dataAtual.getMonth();
-    const anoAtual = dataAtual.getFullYear();
+    let mesAtual = dataAtual.getMonth();
+    let anoAtual = dataAtual.getFullYear();
 
-    const diasDoMes = new Date(anoAtual, mesAtual + 1, 0).getDate();
-    const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
+    const meses = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
 
-    let tabela = '<table><tr>';
-    const diasDaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    const atualizarCalendario = () => {
+        const diasDoMes = new Date(anoAtual, mesAtual + 1, 0).getDate();
+        const primeiroDia = new Date(anoAtual, mesAtual, 1).getDay();
 
-    diasDaSemana.forEach(dia => {
-        tabela += `<th>${dia}</th>`;
+        let tabela = '<table><tr>';
+        const diasDaSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+        diasDaSemana.forEach(dia => {
+            tabela += `<th>${dia}</th>`;
+        });
+
+        tabela += '</tr><tr>';
+
+        for (let i = 0; i < primeiroDia; i++) {
+            tabela += '<td></td>';
+        }
+
+        for (let dia = 1; dia <= diasDoMes; dia++) {
+            if ((dia + primeiroDia - 1) % 7 === 0 && dia !== 1) {
+                tabela += '</tr><tr>';
+            }
+            tabela += `<td onclick="mostrarModalEvento(${dia})">${dia}</td>`;
+        }
+
+        tabela += '</tr></table>';
+        calendar.innerHTML = tabela;
+    };
+
+    const controles = document.createElement('div');
+    controles.id = 'calendar-controls';
+    controles.innerHTML = `
+        <select id="mes-seletor">
+            ${meses.map((mes, index) => `<option value="${index}" ${index === mesAtual ? 'selected' : ''}>${mes}</option>`).join('')}
+        </select>
+        <select id="ano-seletor">
+            ${Array.from({ length: 10 }, (_, i) => anoAtual - 5 + i).map(ano => `<option value="${ano}" ${ano === anoAtual ? 'selected' : ''}>${ano}</option>`).join('')}
+        </select>
+    `;
+
+    calendar.parentElement.insertBefore(controles, calendar);
+
+    document.getElementById('mes-seletor').addEventListener('change', (e) => {
+        mesAtual = parseInt(e.target.value);
+        atualizarCalendario();
     });
 
-    tabela += '</tr><tr>';
+    document.getElementById('ano-seletor').addEventListener('change', (e) => {
+        anoAtual = parseInt(e.target.value);
+        atualizarCalendario();
+    });
 
-    for (let i = 0; i < primeiroDia; i++) {
-        tabela += '<td></td>';
-    }
-
-    for (let dia = 1; dia <= diasDoMes; dia++) {
-        if ((dia + primeiroDia - 1) % 7 === 0 && dia !== 1) {
-            tabela += '</tr><tr>';
-        }
-        tabela += `<td onclick="mostrarModalEvento(${dia})">${dia}</td>`;
-    }
-
-    tabela += '</tr></table>';
-    calendar.innerHTML = tabela;
-}
-
-// Função para adicionar um evento
-function adicionarEvento() {
-    const dia = prompt("Digite o dia do evento:");
-    const nomeEvento = prompt("Digite o nome do evento:");
-    const descricaoEvento = prompt("Digite a descrição do evento:");
-
-    if (dia && nomeEvento && descricaoEvento) {
-        alert(`Evento adicionado:\nDia: ${dia}\nNome: ${nomeEvento}\nDescrição: ${descricaoEvento}`);
-        // Aqui você pode salvar o evento em localStorage ou em um backend
-    } else {
-        alert("Por favor, preencha todos os campos.");
-    }
+    atualizarCalendario();
 }
 
 // Inicializar o calendário ao carregar a página
-document.addEventListener('DOMContentLoaded', inicializarCalendario); 
+document.addEventListener('DOMContentLoaded', inicializarCalendario);
+
+// Função para mostrar o modal de evento
+function mostrarModalEvento(dia) {
+    document.getElementById('dia-evento').value = dia;
+    document.getElementById('nome-evento').value = '';
+    document.getElementById('descricao-evento').value = '';
+    document.getElementById('modal-evento').style.display = 'block';
+}
+
+// Função para salvar o evento
+function salvarEvento(event) {
+    event.preventDefault();
+    
+    const dia = document.getElementById('dia-evento').value;
+    const nomeEvento = document.getElementById('nome-evento').value;
+    const descricaoEvento = document.getElementById('descricao-evento').value;
+
+    if (nomeEvento && descricaoEvento) {
+        alert(`Evento salvo:\nDia: ${dia}\nNome: ${nomeEvento}\nDescrição: ${descricaoEvento}`);
+        // Aqui você pode salvar o evento em localStorage ou em um backend
+        fecharModal('modal-evento');
+    } else {
+        alert("Por favor, preencha todos os campos.");
+    }
+} 

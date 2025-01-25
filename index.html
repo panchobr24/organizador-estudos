@@ -171,7 +171,6 @@
         <section id="calendario" class="section">
             <h2>Calendário de Eventos</h2>
             <div id="calendar"></div>
-            <button onclick="adicionarEvento()">Adicionar Evento</button>
         </section>
     </main>
 
@@ -213,6 +212,29 @@
                     <input type="password" id="senha-cadastro" required>
                 </div>
                 <button type="submit" class="btn-submit">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar eventos -->
+    <div id="modal-evento" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal('modal-evento')">&times;</span>
+            <h2>Adicionar Evento</h2>
+            <form id="form-evento" onsubmit="salvarEvento(event)">
+                <div class="form-group">
+                    <label for="dia-evento">Dia:</label>
+                    <input type="text" id="dia-evento" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="nome-evento">Nome do Evento:</label>
+                    <input type="text" id="nome-evento" required>
+                </div>
+                <div class="form-group">
+                    <label for="descricao-evento">Descrição:</label>
+                    <textarea id="descricao-evento" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Salvar Evento</button>
             </form>
         </div>
     </div>
