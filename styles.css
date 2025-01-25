@@ -467,11 +467,13 @@ input[type="date"]:focus {
 /* Estilos para os botões de autenticação */
 .auth-buttons {
     display: flex;
-    gap: 1rem;
-    margin-left: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-left: 0;
     margin-top: 1rem;
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
 }
 
 .btn-login, .btn-cadastro {
@@ -621,8 +623,10 @@ input[type="date"]:focus {
     }
 
     .auth-buttons {
+        flex-direction: row;
         margin-top: 0;
         width: auto;
+        justify-content: space-between;
     }
 
     .cronograma-grid, .materias-container {
