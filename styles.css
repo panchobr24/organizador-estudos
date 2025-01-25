@@ -617,10 +617,18 @@ input[type="date"]:focus {
 
 @media (min-width: 768px) {
     /* Ajustes para telas médias e grandes */
+    nav {
+        justify-content: space-between;
+    }
+
     .nav-links {
         flex-direction: row;
         align-items: center;
         width: auto;
+    }
+
+    .nav-links li {
+        margin-left: 2rem;
     }
 
     .auth-buttons {

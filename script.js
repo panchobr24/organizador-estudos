@@ -641,51 +641,58 @@ window.onclick = function(event) {
     }
 }
 
-// Funções de autenticação
-async function fazerLogin(event) {
-    event.preventDefault();
-    
-    const email = document.getElementById('email-login').value;
-    const senha = document.getElementById('senha-login').value;
-    
-    // Aqui você implementaria a lógica de autenticação
-    // Por enquanto, vamos apenas simular
-    const usuario = {
-        email: email,
-        nome: 'Usuário'
-    };
-    
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-    fecharModal('modal-login');
-    atualizarInterface();
-}
-
-async function fazerCadastro(event) {
+// Função para salvar um novo usuário
+function fazerCadastro(event) {
     event.preventDefault();
     
     const nome = document.getElementById('nome-cadastro').value;
     const email = document.getElementById('email-cadastro').value;
     const senha = document.getElementById('senha-cadastro').value;
     
-    // Aqui você implementaria a lógica de cadastro
-    // Por enquanto, vamos apenas simular
-    const usuario = {
-        nome: nome,
-        email: email
-    };
+    // Carregar usuários existentes
+    let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
     
-    localStorage.setItem('usuario', JSON.stringify(usuario));
+    // Verificar se o email já está cadastrado
+    if (usuarios.some(usuario => usuario.email === email)) {
+        alert('Este email já está cadastrado.');
+        return;
+    }
+    
+    // Adicionar novo usuário
+    const novoUsuario = { nome, email, senha };
+    usuarios.push(novoUsuario);
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    
+    alert('Cadastro realizado com sucesso!');
     fecharModal('modal-cadastro');
-    atualizarInterface();
 }
 
-function fazerLogout() {
-    localStorage.removeItem('usuario');
-    atualizarInterface();
+// Função para fazer login
+function fazerLogin(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('email-login').value;
+    const senha = document.getElementById('senha-login').value;
+    
+    // Carregar usuários existentes
+    const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+    
+    // Verificar credenciais
+    const usuario = usuarios.find(usuario => usuario.email === email && usuario.senha === senha);
+    
+    if (usuario) {
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+        alert(`Bem-vindo, ${usuario.nome}!`);
+        fecharModal('modal-login');
+        atualizarInterface();
+    } else {
+        alert('Email ou senha incorretos.');
+    }
 }
 
+// Função para atualizar a interface com o usuário logado
 function atualizarInterface() {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
     const authButtons = document.querySelector('.auth-buttons');
     
     if (usuario) {
@@ -701,7 +708,13 @@ function atualizarInterface() {
     }
 }
 
-// Chamar atualizarInterface quando a página carregar
+// Função para fazer logout
+function fazerLogout() {
+    localStorage.removeItem('usuarioLogado');
+    atualizarInterface();
+}
+
+// Inicializar a interface ao carregar a página
 document.addEventListener('DOMContentLoaded', atualizarInterface);
 
 // Função para inicializar o calendário com seleção de mês e ano
