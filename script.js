@@ -747,51 +747,98 @@ function inicializarCalendario() {
         }
 
         for (let dia = 1; dia <= diasDoMes; dia++) {
-            if ((dia + primeiroDia - 1) % 7 === 0 && dia !== 1) {
+            const dataCompleta = `${anoAtual}-${String(mesAtual + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+            const eventos = carregarEventos(dataCompleta);
+            tabela += `<td onclick="mostrarModalEvento('${dataCompleta}')">${dia}${eventos ? `<div class="evento">${eventos}</div>` : ''}</td>`;
+            if ((dia + primeiroDia) % 7 === 0) {
                 tabela += '</tr><tr>';
             }
-            tabela += `<td onclick="mostrarModalEvento(${dia})">${dia}</td>`;
         }
 
         tabela += '</tr></table>';
         calendar.innerHTML = tabela;
     };
 
-    const controles = document.createElement('div');
-    controles.id = 'calendar-controls';
-    controles.innerHTML = `
-        <select id="mes-seletor">
-            ${meses.map((mes, index) => `<option value="${index}" ${index === mesAtual ? 'selected' : ''}>${mes}</option>`).join('')}
-        </select>
-        <select id="ano-seletor">
-            ${Array.from({ length: 10 }, (_, i) => anoAtual - 5 + i).map(ano => `<option value="${ano}" ${ano === anoAtual ? 'selected' : ''}>${ano}</option>`).join('')}
-        </select>
-    `;
+    // Verificar se os controles já existem
+    if (!document.getElementById('calendar-controls')) {
+        const controles = document.createElement('div');
+        controles.id = 'calendar-controls';
+        controles.innerHTML = `
+            <select id="mes-seletor">
+                ${meses.map((mes, index) => `<option value="${index}" ${index === mesAtual ? 'selected' : ''}>${mes}</option>`).join('')}
+            </select>
+            <select id="ano-seletor">
+                ${Array.from({ length: 10 }, (_, i) => anoAtual - 5 + i).map(ano => `<option value="${ano}" ${ano === anoAtual ? 'selected' : ''}>${ano}</option>`).join('')}
+            </select>
+        `;
 
-    calendar.parentElement.insertBefore(controles, calendar);
+        calendar.parentElement.insertBefore(controles, calendar);
 
-    document.getElementById('mes-seletor').addEventListener('change', (e) => {
-        mesAtual = parseInt(e.target.value);
-        atualizarCalendario();
-    });
+        document.getElementById('mes-seletor').addEventListener('change', (e) => {
+            mesAtual = parseInt(e.target.value);
+            atualizarCalendario();
+        });
 
-    document.getElementById('ano-seletor').addEventListener('change', (e) => {
-        anoAtual = parseInt(e.target.value);
-        atualizarCalendario();
-    });
+        document.getElementById('ano-seletor').addEventListener('change', (e) => {
+            anoAtual = parseInt(e.target.value);
+            atualizarCalendario();
+        });
+    }
 
     atualizarCalendario();
 }
 
-// Inicializar o calendário ao carregar a página
-document.addEventListener('DOMContentLoaded', inicializarCalendario);
+// Função para carregar eventos de uma data específica
+function carregarEventos(data) {
+    const eventos = JSON.parse(localStorage.getItem('eventos')) || {};
+    return eventos[data] ? eventos[data].map((evento, index) => `<span class="evento-link" onclick="abrirDetalhesEvento('${data}', ${index})">${evento.nome}</span>`).join('<br>') : '';
+}
 
-// Função para mostrar o modal de evento
-function mostrarModalEvento(dia) {
-    document.getElementById('dia-evento').value = dia;
-    document.getElementById('nome-evento').value = '';
-    document.getElementById('descricao-evento').value = '';
-    document.getElementById('modal-evento').style.display = 'block';
+// Função para abrir detalhes do evento
+function abrirDetalhesEvento(data, index) {
+    const eventos = JSON.parse(localStorage.getItem('eventos')) || {};
+    const evento = eventos[data][index];
+    if (evento) {
+        const detalhes = `
+            <h3>${evento.nome}</h3>
+            <p>${evento.descricao}</p>
+            <button onclick="editarEvento('${data}', ${index})">Editar</button>
+            <button onclick="excluirEvento('${data}', ${index})">Excluir</button>
+        `;
+        document.getElementById('detalhes-evento').innerHTML = detalhes;
+        document.getElementById('modal-detalhes').style.display = 'block';
+    }
+}
+
+// Função para editar um evento
+function editarEvento(data, index) {
+    const eventos = JSON.parse(localStorage.getItem('eventos')) || {};
+    const evento = eventos[data][index];
+    if (evento) {
+        document.getElementById('dia-evento').value = data.split('-')[2];
+        document.getElementById('nome-evento').value = evento.nome;
+        document.getElementById('descricao-evento').value = evento.descricao;
+        document.getElementById('modal-evento').style.display = 'block';
+        excluirEvento(data, index); // Remove o evento antigo para ser substituído
+    }
+}
+
+// Função para excluir um evento
+function excluirEvento(data, index) {
+    const eventos = JSON.parse(localStorage.getItem('eventos')) || {};
+    eventos[data].splice(index, 1);
+    if (eventos[data].length === 0) {
+        delete eventos[data];
+    }
+    localStorage.setItem('eventos', JSON.stringify(eventos));
+    document.getElementById('modal-detalhes').style.display = 'none';
+    inicializarCalendario(); // Atualiza o calendário para remover o evento
+}
+
+// Função para exibir mensagem de confirmação
+function exibirMensagemConfirmacao(mensagem) {
+    document.getElementById('mensagem-confirmacao').innerText = mensagem;
+    document.getElementById('modal-confirmacao').style.display = 'block';
 }
 
 // Função para salvar o evento
@@ -803,10 +850,38 @@ function salvarEvento(event) {
     const descricaoEvento = document.getElementById('descricao-evento').value;
 
     if (nomeEvento && descricaoEvento) {
-        alert(`Evento salvo:\nDia: ${dia}\nNome: ${nomeEvento}\nDescrição: ${descricaoEvento}`);
-        // Aqui você pode salvar o evento em localStorage ou em um backend
+        const dataCompleta = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        const eventos = JSON.parse(localStorage.getItem('eventos')) || {};
+        
+        if (!eventos[dataCompleta]) {
+            eventos[dataCompleta] = [];
+        }
+        
+        eventos[dataCompleta].push({ nome: nomeEvento, descricao: descricaoEvento });
+        localStorage.setItem('eventos', JSON.stringify(eventos));
+        
+        exibirMensagemConfirmacao(`Evento salvo com sucesso:\nDia: ${dia}\nNome: ${nomeEvento}\nDescrição: ${descricaoEvento}`);
         fecharModal('modal-evento');
+        inicializarCalendario(); // Atualiza o calendário para mostrar o evento
     } else {
         alert("Por favor, preencha todos os campos.");
     }
-} 
+}
+
+// Função para mostrar o modal de evento ou detalhes
+function mostrarModalEvento(dataCompleta) {
+    const eventos = JSON.parse(localStorage.getItem('eventos')) || {};
+    if (eventos[dataCompleta] && eventos[dataCompleta].length > 0) {
+        // Se já existe um evento, abrir o modal de detalhes
+        abrirDetalhesEvento(dataCompleta, 0); // Abre o primeiro evento da lista
+    } else {
+        // Caso contrário, abrir o modal para adicionar um novo evento
+        document.getElementById('dia-evento').value = dataCompleta.split('-')[2];
+        document.getElementById('nome-evento').value = '';
+        document.getElementById('descricao-evento').value = '';
+        document.getElementById('modal-evento').style.display = 'block';
+    }
+}
+
+// Inicializar o calendário ao carregar a página
+document.addEventListener('DOMContentLoaded', inicializarCalendario); 
